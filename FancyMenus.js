@@ -1,8 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ViewPropTypes } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
+import { createNavigator, createNavigationContainer, SafeAreaView, TabRouter, addNavigationHelpers } from 'react-navigation';
 import PropTypes from 'prop-types';
 import IndividualNavigator from './IndividualNavigator';
+import Menu from './Menu'
+
+const MyNavScreen = ({ navigation, banner }) => (
+  <SafeAreaView forceInset={{ horizontal: 'always' }}>
+    <Text>{banner}</Text>
+  </SafeAreaView>
+);
+
+const MyHomeScreen = ({ navigation }) => (
+  <MyNavScreen banner="Home Screen" navigation={navigation} />
+);
 
 
 export default class Dropdown extends React.Component {
@@ -17,37 +28,30 @@ export default class Dropdown extends React.Component {
       icon: null,
       children: [],
       screens: [],
+      screenNames: [],
       buttonClicked: false
     }
   }
 
-  // const arr = ['shirt', 'shoes', 'hat',...];
-  // const tab = [];
-  //
-  // for (let i = 0; i < arr.length; i++) {
-  //   tab[arr[i]] = { screen: AppScreen };
-  // }
-  //
-  // const App = TabNavigator(
-  //   tab,
-  //   {
-  //     tabBarOptions: { ... }
-  //   }
-  // );
 
-  componentDidMount() {
-    this.checkLocalFile(this.props.icon)
-    let children = [];
-    let screens = [];
-    this.props.children.forEach(item => {
-      children.push({
-        icon: item.props.icon
-      })
-      screens.push({
-        screen: item.props.navigateTo
-      })
-    })
-    this.setState({ children })
+  componentWillMount() {
+    // this.checkLocalFile(this.props.icon)
+    // let children = [];
+    // let screens = [];
+    // let screenNames = [];
+    // this.props.children.forEach(item => {
+    //   children.push({
+    //     icon: item.props.icon
+    //   })
+    //   let screenObject = {};
+    //   let page = item.props.navigateTo
+    //   screenObject[item.props.name] = {
+    //     screen: page
+    //   }
+    //   screens.push(screenObject)
+    //   screenNames.push(item.props.name)
+    // })
+    // this.setState({ children, screens, screenNames })
   }
 
 
@@ -71,31 +75,24 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
-    // console.log(JSON.stringify(this.state.screens))
     return (
       <View style={styles.menu}>
-        <TouchableOpacity onPress={this.drop.bind(this)} style={styles.item}>
-          <Image source={this.state.icon} style={styles.image}/>
-        </TouchableOpacity>
-        {this.state.buttonClicked ? (
-          this.state.children.map((item, i) => (
-          <IndividualNavigator item={item} key={i}/>
-        ))) : null}
+        {/* <Menu drop={this.drop.bind(this)} icon={this.props.icon}/> */}
+        {/* {this.state.buttonClicked ? (
+          this.state.children.map(item => (
+          <MyHomeScreen key={item.props.icon}/>
+        ))) : null} */}
       </View>
     )
   }
 }
-
-const navigator = DrawerNavigator(
-
-)
 
 
 const styles = StyleSheet.create({
   menu: {
     width: 40,
     height: 400,
-    backgroundColor: 'lightblue'
+    backgroundColor: 'green'
   },
   item: {
     width: 25,
@@ -109,5 +106,128 @@ const styles = StyleSheet.create({
   }
 })
 
-// module.exports.Dropdown = Dropdown
-// module.exports.Fan = Fan
+/**
+ * @flow
+ */
+
+// import React from 'react';
+// import {
+//   Button,
+//   Platform,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
+// } from 'react-native';
+// import {
+//   createNavigator,
+//   createNavigationContainer,
+//   SafeAreaView,
+//   TabRouter,
+//   addNavigationHelpers,
+// } from 'react-navigation';
+// import SampleText from './SampleText';
+//
+// const MyNavScreen = ({ navigation, banner }) => (
+//   <ScrollView>
+//     <SafeAreaView forceInset={{ horizontal: 'always' }}>
+//       <SampleText>{banner}</SampleText>
+//       <Button
+//         onPress={() => {
+//           navigation.goBack(null);
+//         }}
+//         title="Go back"
+//       />
+//     </SafeAreaView>
+//   </ScrollView>
+// );
+//
+// const MyHomeScreen = ({ navigation }) => (
+//   <MyNavScreen banner="Home Screen" navigation={navigation} />
+// );
+//
+// const MyNotificationsScreen = ({ navigation }) => (
+//   <MyNavScreen banner="Notifications Screen" navigation={navigation} />
+// );
+//
+// const MySettingsScreen = ({ navigation }) => (
+//   <MyNavScreen banner="Settings Screen" navigation={navigation} />
+// );
+//
+// const CustomTabBar = ({ navigation }) => {
+//   const { routes } = navigation.state;
+//   return (
+//     <SafeAreaView style={styles.tabContainer}>
+//       {routes.map(route => (
+//         <TouchableOpacity
+//           onPress={() => navigation.navigate(route.routeName)}
+//           style={styles.tab}
+//           key={route.routeName}
+//         >
+//           <Text>{route.routeName}</Text>
+//         </TouchableOpacity>
+//       ))}
+//     </SafeAreaView>
+//   );
+// };
+//
+// const CustomTabView = ({ router, navigation }) => {
+//   const { routes, index } = navigation.state;
+//   const ActiveScreen = router.getComponentForRouteName(routes[index].routeName);
+//   return (
+//     <SafeAreaView forceInset={{ top: 'always' }}>
+//       <CustomTabBar navigation={navigation} />
+//       <ActiveScreen
+//         navigation={addNavigationHelpers({
+//           dispatch: navigation.dispatch,
+//           state: routes[index],
+//         })}
+//         screenProps={{}}
+//       />
+//     </SafeAreaView>
+//   );
+// };
+//
+// const CustomTabRouter = TabRouter(
+//   {
+//     Home: {
+//       screen: MyHomeScreen,
+//       path: '',
+//     },
+//     Notifications: {
+//       screen: MyNotificationsScreen,
+//       path: 'notifications',
+//     },
+//     Settings: {
+//       screen: MySettingsScreen,
+//       path: 'settings',
+//     },
+//   },
+//   {
+//     // Change this to start on a different tab
+//     initialRouteName: 'Home',
+//   }
+// );
+//
+// const CustomTabs = createNavigationContainer(
+//   createNavigator(CustomTabRouter)(CustomTabView)
+// );
+//
+// const styles = StyleSheet.create({
+//   tabContainer: {
+//     flexDirection: 'row',
+//     height: 48,
+//   },
+//   tab: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     margin: 4,
+//     borderWidth: 1,
+//     borderColor: '#ddd',
+//     borderRadius: 4,
+//   },
+// });
+//
+// export default CustomTabs;

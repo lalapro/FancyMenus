@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Dropdown from './FancyMenus';
 import FirstPage from './FirstPage';
 import SecondPage from './SecondPage';
+import ThirdPage from './ThirdPage';
+import FourthPage from './FourthPage';
 import { Drawer } from './test';
 
 

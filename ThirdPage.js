@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-export default class FirstPage extends React.Component {
+export default class ThirdPage extends React.Component {
   render() {
     return (
       <View style={styles.container}>
         <Text>
-          First Page
+          Third Page
         </Text>
       </View>
     );
