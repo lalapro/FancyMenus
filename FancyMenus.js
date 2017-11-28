@@ -17,9 +17,9 @@ const MyHomeScreen = ({ navigation }) => (
 
 
 export default class Dropdown extends React.Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-  }
+  // static propTypes = {
+  //   children: PropTypes.node.isRequired,
+  // }
 
 
   constructor(props){
@@ -75,13 +75,16 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
+    console.log(this.props.tabs, 'hihi')
+    // const Tab = {this.props.tabs}
     return (
-      <View style={styles.menu}>
-        {/* <Menu drop={this.drop.bind(this)} icon={this.props.icon}/> */}
-        {/* {this.state.buttonClicked ? (
-          this.state.children.map(item => (
-          <MyHomeScreen key={item.props.icon}/>
-        ))) : null} */}
+      <View >
+        <Tab/>
+        {/* <TouchableOpacity onPress={this.props.drop} style={styles.item}>
+          <Image source={{uri: 'http://pixsector.com/cache/db444a5d/av3408bf9a8e4c42e82ae.png'}} style={styles.image}/>
+        </TouchableOpacity>
+        {this.state.buttonClicked ? ( */}
+        {/* ): null} */}
       </View>
     )
   }

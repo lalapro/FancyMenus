@@ -17,7 +17,7 @@ export default class Menu extends React.Component {
 
 
   componentDidMount() {
-    this.checkLocalFile(this.props.icon)
+    // this.checkLocalFile(this.props.icon)
   }
 
   checkLocalFile(icon) {
@@ -34,10 +34,10 @@ export default class Menu extends React.Component {
 
 
   render() {
-    console.log(this.props.icon, 'menu js')
+    // console.log(this.props.icon, 'menu js')
     return (
       <TouchableOpacity onPress={this.props.drop} style={styles.item}>
-        <Image source={this.state.icon} style={styles.image}/>
+        <Image source={{uri: 'http://pixsector.com/cache/db444a5d/av3408bf9a8e4c42e82ae.png'}} style={styles.image}/>
       </TouchableOpacity>
     )
   }

@@ -8,6 +8,9 @@ export default class FirstPage extends React.Component {
         <Text>
           First Page
         </Text>
+        <Text>
+          First Page PART 2
+        </Text>
       </View>
     );
   }
@@ -17,8 +20,8 @@ export default class FirstPage extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: 'lightblue',
     justifyContent: 'center',
+    alignItems: 'center'
   },
 });
