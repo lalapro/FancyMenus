@@ -20,12 +20,7 @@ import {
 } from 'react-navigation';
 // import FancyMenus from './FancyMenus'
 
-const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 
-const arr = []
-for (var i = 0; i < 4; i++) {
-  arr.push(i)
-}
 
 
 class CustomNavigation extends React.Component {
@@ -37,7 +32,8 @@ class CustomNavigation extends React.Component {
       isPressed: false,
       currentPage: 0,
       currentMenuIcon: props.icon,
-      animatedValue: []
+      animatedValue: [],
+      inverse: true
     }
 
   }
@@ -45,7 +41,12 @@ class CustomNavigation extends React.Component {
   componentWillMount() {
     this.createCustomRouter(this.props.children);
     this.createCustomIconArray(this.props.children);
-    this.resetAnimations();
+  }
+
+  reset() {
+    this.state.customIcons.forEach((a, i) => {
+      this.state.animatedValue[i] = new Animated.Value(0)
+    })
   }
 
   createCustomRouter(screens) {
@@ -62,15 +63,15 @@ class CustomNavigation extends React.Component {
 
   createCustomIconArray(screens) {
     let customIcons = [];
-    screens.forEach(child => {
+    screens.forEach((child, i) => {
       customIcons.push(child.props.icon)
     })
-    this.setState({customIcons});
+    this.setState({customIcons}, () => this.reset());
   }
 
   pressMe() {
     this.setState({ isPressed: !this.state.isPressed }, () => {
-      this.state.isPressed ? this.animate() : this.resetAnimations()
+      this.state.isPressed ? this.animate(1) : this.reset();
     })
   }
 
@@ -82,75 +83,65 @@ class CustomNavigation extends React.Component {
     })
   }
 
-  animate() {
+  animate(value) {
     const animations = this.state.animatedValue.map((item, i) => {
       return Animated.timing(
         this.state.animatedValue[i],
         {
-          toValue: 1,
-          duration: 100
+          toValue: value,
+          duration: 100,
         }
       )
     })
     Animated.sequence(animations).start()
   }
 
-  resetAnimations() {
-    this.props.children.forEach((value, i) => {
-      this.state.animatedValue[i] = new Animated.Value(0)
-    })
+  returnAnimate(routes, navigation) {
+    return routes.map((route, i) => {
+      return (
+        <Animated.View key={i} style={{opacity: this.state.animatedValue[i]}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(route.routeName)
+              this.changeCurrentPage(i)
+            }}
+            style={[
+              styles.tab,
+              {
+                transform: [{
+                  translateY: this.state.animatedValue[i].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-150, 0]
+                  })
+                }]
+              }]}
+              key={route.routeName}
+              >
+                <Image source={this.state.customIcons[i]} style={styles.image}/>
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+        )
   }
-
 
   render() {
     const CustomTabBar = ({ navigation }) => {
       const menuStyle = this.props.style
       const { routes } = navigation.state;
 
-      // transform: [{
-      //       translateY: this.state.fadeAnim.interpolate({
-      //         inputRange: [0, 1],
-      //         outputRange: [150, 0]  // 0 : 150, 0.5 : 75, 1 : 0
-      //       }),
-      //     }],
 
-      const animations = routes.map((route, i) => {
-        // console.log(movingMargin)
-        return <Animated.View key={i} style={{opacity: this.state.animatedValue[i]}}>
-            <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate(route.routeName)
-                  this.changeCurrentPage(i)
-                }}
-                style={[
-                  styles.tab,
-                  {
-                    transform: [{
-                      translateY: this.state.animatedValue[i].interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [-150, 0]
-                      })
-                    }]
-                  }]}
-                key={route.routeName}
-              >
-                <Image source={this.state.customIcons[i]} style={styles.image}/>
-              </TouchableOpacity>
-          </Animated.View>
-      })
       return (
         <View style={[menuStyle, styles.menu]}>
           <TouchableOpacity onPress={this.pressMe.bind(this)}>
             <Image source={this.state.currentMenuIcon} style={styles.image}/>
           </TouchableOpacity>
-          {this.state.isPressed ? ( animations ) : null}
+          {this.state.isPressed ? this.returnAnimate(routes, navigation) : null}
         </View>
       );
     };
 
 
     const CustomTabView = ({ router, navigation }) => {
-      // console.log('first')
       const { routes, index } = navigation.state;
       const ActiveScreen = router.getComponentForRouteName(routes[index].routeName);
       return (
@@ -197,7 +188,8 @@ class CustomPage extends React.Component {
 const styles = StyleSheet.create({
   tabContainer: {
     flex: 1,
-    width: D_WIDTH,
+    width: "100%",
+
   },
   menu: {
     position: 'absolute',
@@ -217,4 +209,3 @@ export {
   CustomNavigation,
   CustomPage
 }
-// export default CustomNavigation;
