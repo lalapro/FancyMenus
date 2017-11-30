@@ -33,7 +33,8 @@ class CustomNavigation extends React.Component {
       currentPage: 0,
       currentMenuIcon: props.icon,
       animatedValue: [],
-      inverse: true
+      inverse: true,
+      dropZoneValues: null
     }
 
   }
@@ -41,6 +42,16 @@ class CustomNavigation extends React.Component {
   componentWillMount() {
     this.createCustomRouter(this.props.children);
     this.createCustomIconArray(this.props.children);
+  }
+
+  setDropZoneValues(event) {      //Step 1
+    this.setState({
+      dropZoneValues : event.nativeEvent.layout
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.isPressed !== nextState.isPressed
   }
 
   reset() {
@@ -70,34 +81,42 @@ class CustomNavigation extends React.Component {
   }
 
   pressMe() {
+    console.log(this.state.dropZoneValues)
     this.setState({ isPressed: !this.state.isPressed }, () => {
-      this.state.isPressed ? this.animate(1) : this.reset();
+      this.state.isPressed ? this.animate(1) : this.animate(0);
     })
   }
 
   changeCurrentPage(currentPage) {
     currentPage = currentPage.toString();
-    this.setState({currentPage}, () => {
-      currentMenuIcon = this.state.customTabRouter[this.state.currentPage].menuIcon;
-      this.setState({currentMenuIcon})
-    })
+    // this.state.currentMenuIcon = this.state.customTabRouter[this.state.currentPage].menuIcon;
+    this.setState({currentPage})
   }
+
+  // friction
+  // speed
+  // tension
+  // bounciness
+  // nativedriver
 
   animate(value) {
     const animations = this.state.animatedValue.map((item, i) => {
-      return Animated.timing(
+      return Animated.spring(
         this.state.animatedValue[i],
         {
           toValue: value,
-          duration: 100,
+          speed: 12,
+          bounciness: 12,
+          useNativeDriver: true
         }
       )
     })
-    Animated.sequence(animations).start()
+    Animated.parallel(animations).start()
   }
 
   returnAnimate(routes, navigation) {
     return routes.map((route, i) => {
+      // console.log(this.state)
       return (
         <Animated.View key={i} style={{opacity: this.state.animatedValue[i]}}>
           <TouchableOpacity
@@ -111,7 +130,7 @@ class CustomNavigation extends React.Component {
                 transform: [{
                   translateY: this.state.animatedValue[i].interpolate({
                     inputRange: [0, 1],
-                    outputRange: [-150, 0]
+                    outputRange: [-90, 0]
                   })
                 }]
               }]}
@@ -131,11 +150,11 @@ class CustomNavigation extends React.Component {
 
 
       return (
-        <View style={[menuStyle, styles.menu]}>
+        <View style={[menuStyle, styles.menu]} onLayout={this.setDropZoneValues.bind(this)}>
           <TouchableOpacity onPress={this.pressMe.bind(this)}>
             <Image source={this.state.currentMenuIcon} style={styles.image}/>
           </TouchableOpacity>
-          {this.state.isPressed ? this.returnAnimate(routes, navigation) : null}
+          {this.state.animatedValue.length > 0 ? this.returnAnimate(routes, navigation) : null}
         </View>
       );
     };
@@ -196,7 +215,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   tab: {
-    marginTop: 50
+    marginTop: 20
   },
   image: {
     width: 40,
@@ -205,7 +224,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export {
+export  {
   CustomNavigation,
   CustomPage
 }

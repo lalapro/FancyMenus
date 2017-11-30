@@ -16,7 +16,7 @@ export default class SecondPage extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
+    backgroundColor: 'lightgrey',
     alignItems: 'center',
     justifyContent: 'center',
   },

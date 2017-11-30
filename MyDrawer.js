@@ -1,25 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import FirstPage from './FirstPage';
 import SecondPage from './SecondPage';
 import ThirdPage from './ThirdPage';
 import FourthPage from './FourthPage';
-import { CustomNavigation, CustomPage } from './CustomNavigation';
+import { FancyNavigation, CustomPage } from './FancyNavigation';
 
+const {height, width} = Dimensions.get('window');
 
 
 export default class MyDrawer extends React.Component {
   render() {
     return (
-      <CustomNavigation
+      <FancyNavigation
         icon={{uri: 'https://cdn4.iconfinder.com/data/icons/tupix-1/30/list-512.png'}}
         style={styles.menu}
       >
         <CustomPage path={FirstPage} icon={require(`./assets/apple.png`)}/>
         <CustomPage path={SecondPage} icon={require(`./assets/phone.png`)}/>
-        <CustomPage path={ThirdPage} icon={require(`./assets/stats.png`)} changeIcon={{uri: 'https://d30y9cdsu7xlg0.cloudfront.net/png/102109-200.png'}}/>
+        <CustomPage path={ThirdPage} icon={require(`./assets/stats.png`)} />
         <CustomPage path={FourthPage} icon={require(`./assets/whyfy.png`)} />
-      </CustomNavigation>
+      </FancyNavigation>
     )
   }
 }
@@ -27,7 +28,7 @@ export default class MyDrawer extends React.Component {
 
 const styles = StyleSheet.create({
   menu: {
-    top: 50,
-    left: 50
+    top: height - 100,
+    left: width/2 - 30
   }
 });
