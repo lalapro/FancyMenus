@@ -47,6 +47,10 @@ class CustomNavigation extends React.Component {
   setDropZoneValues(event) {      //Step 1
     this.setState({
       dropZoneValues : event.nativeEvent.layout
+    }, () => {
+      if (this.createPositions) {
+        this.createPositions(this.props.children.length);
+      }
     });
   }
 
@@ -81,7 +85,7 @@ class CustomNavigation extends React.Component {
   }
 
   pressMe() {
-    console.log(this.state.dropZoneValues)
+    console.log(this.state)
     this.setState({ isPressed: !this.state.isPressed }, () => {
       this.state.isPressed ? this.animate(1) : this.animate(0);
     })
@@ -89,15 +93,8 @@ class CustomNavigation extends React.Component {
 
   changeCurrentPage(currentPage) {
     currentPage = currentPage.toString();
-    // this.state.currentMenuIcon = this.state.customTabRouter[this.state.currentPage].menuIcon;
     this.setState({currentPage})
   }
-
-  // friction
-  // speed
-  // tension
-  // bounciness
-  // nativedriver
 
   animate(value) {
     const animations = this.state.animatedValue.map((item, i) => {

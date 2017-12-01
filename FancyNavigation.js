@@ -28,14 +28,36 @@ const {height, width} = Dimensions.get('window');
 class FancyNavigation extends CustomNavigation {
   constructor(props){
     super(props)
-    this.state = super.state
+    this.state = Object.assign(this.state, {
+      radius: this.props.radius
+    })
+  }
 
+  componentWillMount() {
+    this.createCustomRouter(this.props.children);
+    this.createCustomIconArray(this.props.children);
 
+  }
+
+  createPositions(num) {
+    let fannedPositions = [];
+    for (let i = 1; i <= num; i++) {
+      let angle = 180 / (num + 1) * i;
+      let radians = angle * (Math.PI / 180);
+      var x = this.state.radius * Math.sin(radians);
+      var y = this.state.radius * Math.cos(radians);
+      fannedPositions.push({
+        position: 'absolute',
+        top: -Math.round(x),
+        left: -Math.round(y),
+        zIndex: 100
+      })
+    }
+    this.setState({fannedPositions})
   }
 
   returnAnimate(routes, navigation) {
     return routes.map((route, i) => {
-      // console.log(this.state)
       return (
         <Animated.View key={i} style={{opacity: this.state.animatedValue[i]}}>
           <TouchableOpacity
@@ -44,12 +66,12 @@ class FancyNavigation extends CustomNavigation {
               this.changeCurrentPage(i)
             }}
             style={[
-              styles.tab,
+              this.state.fannedPositions[i],
               {
                 transform: [{
                   translateY: this.state.animatedValue[i].interpolate({
                     inputRange: [0, 1],
-                    outputRange: [-90, 0]
+                    outputRange: [40, 0]
                   })
                 }]
               }]}
@@ -63,16 +85,14 @@ class FancyNavigation extends CustomNavigation {
   }
 
 
+
+
 }
 
 
 
 
 const styles = StyleSheet.create({
-  tab: {
-    position: 'relative',
-    left: -50
-  },
   image: {
     width: 40,
     height: 40,

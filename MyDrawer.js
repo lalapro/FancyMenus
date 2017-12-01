@@ -15,6 +15,7 @@ export default class MyDrawer extends React.Component {
       <FancyNavigation
         icon={{uri: 'https://cdn4.iconfinder.com/data/icons/tupix-1/30/list-512.png'}}
         style={styles.menu}
+        radius={100}
       >
         <CustomPage path={FirstPage} icon={require(`./assets/apple.png`)}/>
         <CustomPage path={SecondPage} icon={require(`./assets/phone.png`)}/>
@@ -28,7 +29,7 @@ export default class MyDrawer extends React.Component {
 
 const styles = StyleSheet.create({
   menu: {
-    top: height - 100,
+    top: height - 150,
     left: width/2 - 30
   }
 });
