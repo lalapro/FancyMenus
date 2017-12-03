@@ -4,7 +4,7 @@ import FirstPage from './FirstPage';
 import SecondPage from './SecondPage';
 import ThirdPage from './ThirdPage';
 import FourthPage from './FourthPage';
-import { FancyNavigation, CustomPage } from './FancyNavigation';
+import { CustomNavigation, CustomPage } from './CustomNavigation';
 
 const {height, width} = Dimensions.get('window');
 
@@ -12,7 +12,7 @@ const {height, width} = Dimensions.get('window');
 export default class MyDrawer extends React.Component {
   render() {
     return (
-      <FancyNavigation
+      <CustomNavigation
         icon={{uri: 'https://cdn4.iconfinder.com/data/icons/tupix-1/30/list-512.png'}}
         style={styles.menu}
         radius={100}
@@ -21,7 +21,7 @@ export default class MyDrawer extends React.Component {
         <CustomPage path={SecondPage} icon={require(`./assets/phone.png`)}/>
         <CustomPage path={ThirdPage} icon={require(`./assets/stats.png`)} />
         <CustomPage path={FourthPage} icon={require(`./assets/whyfy.png`)} />
-      </FancyNavigation>
+      </CustomNavigation>
     )
   }
 }
@@ -29,7 +29,7 @@ export default class MyDrawer extends React.Component {
 
 const styles = StyleSheet.create({
   menu: {
-    top: height - 150,
+    top: height - 500,
     left: width/2 - 30
   }
 });
